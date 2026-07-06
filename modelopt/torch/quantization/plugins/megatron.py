@@ -15,6 +15,7 @@
 
 """Support quantization for megatron linear layers."""
 
+import re
 import types
 from contextlib import contextmanager
 from typing import Any
@@ -703,8 +704,13 @@ if HAS_TE:
             return super()._load_from_state_dict(filtered_state_dict, prefix, *args, **kwargs)
 
         def _process_quantizer_amax(self, k, v, quantizer_state_dict):
-            assert v.numel() == 1, "TEGroupedLinear only supports per-tensor quantization"
-            quantizer_state_dict[k] = v.view(-1)
+            # Per-expert quantizers have independent checkpoint keys. Preserve their native
+            # scalar, channel, or block shape instead of flattening them through the legacy
+            # single-quantizer path.
+            if re.match(r"weight_quantizer\.\d+\..+_amax$", k):
+                quantizer_state_dict[k] = v
+            else:
+                quantizer_state_dict[k] = v.view(-1) if v.numel() == 1 else v
 
     @QuantModuleRegistry.register(
         {TEColumnParallelGroupedLinear: "megatron_TEColumnParallelGroupedLinear"}

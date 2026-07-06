@@ -17,6 +17,7 @@
 
 import copy
 import inspect
+import os
 import warnings
 
 import torch
@@ -33,6 +34,8 @@ from .custom import _ParallelLinear
 
 _TE_VERSION = Version(te.__version__)
 
+_COMPILE_TEGROUPED_WEIGHT_LOOP_ENV = "MODELOPT_TEGROUPED_COMPILE_WEIGHT_LOOP"
+
 
 def _assert_te_fp8_enabled():
     """Check if Transformer Engine FP8 autocast is enabled and raise error if so."""
@@ -47,6 +50,13 @@ def _assert_te_fp8_enabled():
             )
     except ImportError:
         pass  # Older TE versions may not have this API
+
+
+def _is_calibrating(quantizer):
+    """Return whether a tensor or sequential quantizer is collecting calibration stats."""
+    if isinstance(quantizer, SequentialQuantizer):
+        return any(getattr(q, "_if_calib", False) for q in quantizer)
+    return getattr(quantizer, "_if_calib", False)
 
 
 @QuantModuleRegistry.register({te.pytorch.Linear: "te_Linear"})
@@ -145,6 +155,21 @@ class _QuantTEGroupedLinear(_ParallelLinear):
             *(copy.deepcopy(self.weight_quantizer) for _ in range(self.num_gemms))
         )
 
+        # Compile only the per-expert quantizer loop. The surrounding TE grouped GEMM remains
+        # eager, and the opt-in flag leaves the default execution path unchanged.
+        if os.getenv(_COMPILE_TEGROUPED_WEIGHT_LOOP_ENV, "0") == "1":
+            quantizers = tuple(self.weight_quantizer)
+
+            def quantize_weights(*weights):
+                return tuple(quantizer(weight) for quantizer, weight in zip(quantizers, weights))
+
+            self._compiled_weight_quantizer_loop = torch.compile(
+                quantize_weights,
+                backend="inductor",
+                fullgraph=False,
+                mode="reduce-overhead",
+            )
+
     def modelopt_post_restore(self, prefix: str = ""):
         # GroupedMLP stores the weights as weight0, weight1, etc. To run post_restore in order to
         # initialize the quantizer states, self.weight is used to extract shape, dtype etc. Assigning
@@ -204,9 +229,19 @@ class _QuantTEGroupedLinear(_ParallelLinear):
 
         new_args = list(args)
         new_args[inp_pos] = self.input_quantizer(args[inp_pos])
-        for gemm_idx in range(num_gemms):
-            pos = weights_start + gemm_idx
-            new_args[pos] = self.weight_quantizer[gemm_idx](args[pos])
+        weights = tuple(args[weights_start : weights_start + num_gemms])
+        # Calibration mutates collector state and must stay outside Inductor/CUDAGraph capture.
+        use_compiled_loop = hasattr(self, "_compiled_weight_quantizer_loop") and not any(
+            _is_calibrating(quantizer) for quantizer in self.weight_quantizer
+        )
+        if use_compiled_loop:
+            quantized_weights = self._compiled_weight_quantizer_loop(*weights)
+        else:
+            quantized_weights = tuple(
+                self.weight_quantizer[gemm_idx](weight) for gemm_idx, weight in enumerate(weights)
+            )
+        for gemm_idx, quantized_weight in enumerate(quantized_weights):
+            new_args[weights_start + gemm_idx] = quantized_weight
         output = getattr(package, func_name)(*new_args)
         # TE 2.15+ returns `(out, new_workspaces)`; TE <= 2.14 returns just `out`.
         # Only the activation tensor participates in output quantization.
