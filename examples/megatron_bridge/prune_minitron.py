@@ -98,6 +98,14 @@ def get_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--hf_model_name_or_path", type=str, required=True)
     parser.add_argument("--trust_remote_code", action="store_true")
+    parser.add_argument(
+        "--no_moe_grouped_gemm",
+        action="store_true",
+        help=(
+            "Use SequentialMLP for MoE experts instead of the (default) efficient fused "
+            "TEGroupedMLP (grouped GEMM). Only affects MoE models."
+        ),
+    )
 
     target_group = parser.add_mutually_exclusive_group(required=True)
     target_group.add_argument(
@@ -373,7 +381,7 @@ def main(args: argparse.Namespace):
             "mtp_num_layers": 0,  # MTP is not supported during calibration
         },
         init_model_parallel=True,
-        moe_grouped_gemm=False,
+        moe_grouped_gemm=not args.no_moe_grouped_gemm,
     )
 
     # TODO: Support pruning with MTP heads enabled (e.g. Qwen3.5 mtp_num_hidden_layers=1).
