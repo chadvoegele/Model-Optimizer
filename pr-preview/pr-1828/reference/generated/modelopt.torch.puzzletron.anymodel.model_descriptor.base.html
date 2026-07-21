@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>base &mdash; Model Optimizer 0.0.1.dev1+g053507d7a</title>
+  <title>base &mdash; Model Optimizer 0.0.1.dev1+g0146d99ca</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -115,7 +115,6 @@
 <li class="toctree-l4 current"><a class="reference internal" href="modelopt.torch.puzzletron.anymodel.html">anymodel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="modelopt.torch.puzzletron.block_config.html">block_config</a></li>
 <li class="toctree-l4"><a class="reference internal" href="modelopt.torch.puzzletron.build_library_and_stats.html">build_library_and_stats</a></li>
-<li class="toctree-l4"><a class="reference internal" href="modelopt.torch.puzzletron.bypass_distillation.html">bypass_distillation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="modelopt.torch.puzzletron.dataset.html">dataset</a></li>
 <li class="toctree-l4"><a class="reference internal" href="modelopt.torch.puzzletron.entrypoint.html">entrypoint</a></li>
 <li class="toctree-l4"><a class="reference internal" href="modelopt.torch.puzzletron.mip.html">mip</a></li>
@@ -413,7 +412,7 @@ use the util method <cite>return_tuple_of_size</cite> to return trailing None va
 <dl class="py method">
 <dt class="sig sig-object py" id="modelopt.torch.puzzletron.anymodel.model_descriptor.base.ModelDescriptor.pruning_mixins">
 <span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">pruning_mixins</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#modelopt.torch.puzzletron.anymodel.model_descriptor.base.ModelDescriptor.pruning_mixins" title="Link to this definition"></a></dt>
-<dd><p>Return available pruning mixins for bypass distillation.</p>
+<dd><p>Return available pruning mixins for child-checkpoint initialization.</p>
 <p>Override in subclasses to provide model-specific pruning mixins, e.g.
 <code class="docutils literal notranslate"><span class="pre">{&quot;kv_heads&quot;:</span> <span class="pre">KVHeadsPruningMixIn(...),</span> <span class="pre">&quot;experts_removal&quot;:</span> <span class="pre">ExpertRemovalPruningMixIn(...)}</span></code>.</p>
 <p>Returns an empty dict by default so that descriptors that do not need

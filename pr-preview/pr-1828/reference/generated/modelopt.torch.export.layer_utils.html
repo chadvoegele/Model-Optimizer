@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>layer_utils &mdash; Model Optimizer 0.0.1.dev1+g053507d7a</title>
+  <title>layer_utils &mdash; Model Optimizer 0.0.1.dev1+g0146d99ca</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -573,6 +573,10 @@ Otherwise it will not be supported.</p>
 <dt class="sig sig-object py" id="modelopt.torch.export.layer_utils.get_expert_linear_names">
 <span class="sig-name descname"><span class="pre">get_expert_linear_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modelopt.torch.export.layer_utils.get_expert_linear_names" title="Link to this definition"></a></dt>
 <dd><p>Get the list of linear names for the experts.</p>
+<p>Fused-expert layouts are detected structurally first; otherwise the names come
+from the model’s own spec (<code class="docutils literal notranslate"><span class="pre">MoESpec.expert_linear_names_for</span></code>). Raises
+NotImplementedError when nothing resolves, so a new MoE model fails loudly
+instead of silently inheriting another model’s naming.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -584,14 +588,6 @@ Otherwise it will not be supported.</p>
 <dd class="field-even"><p><em>list</em>[<em>str</em>]</p>
 </dd>
 </dl>
-<p>Resolution order: structural detection of fused-expert layouts first (runtime
-state: transformers&gt;=5 fused experts, and modules rewritten during export), then
-the model’s own spec by model type — the block class name is not needed, so a
-spec can provide expert naming without declaring <code class="docutils literal notranslate"><span class="pre">block_names</span></code>; the block
-class only disambiguates same-model layout variants (see
-<code class="docutils literal notranslate"><span class="pre">MoESpec.expert_linear_names_for</span></code>). Raises NotImplementedError when nothing
-resolves, so a new MoE model fails loudly instead of silently inheriting another
-model’s naming.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -736,9 +732,8 @@ resolve the model’s own spec.</p></li>
 <dt class="sig sig-object py" id="modelopt.torch.export.layer_utils.is_moe">
 <span class="sig-name descname"><span class="pre">is_moe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modelopt.torch.export.layer_utils.is_moe" title="Link to this definition"></a></dt>
 <dd><p>Returns whether the module is an MOE layer.</p>
-<p><code class="docutils literal notranslate"><span class="pre">model_type</span></code> (<code class="docutils literal notranslate"><span class="pre">model.config.model_type</span></code>) strictly scopes the registry lookup
-to the model’s own spec; the generic naming conventions and the structural check
-below are unaffected by it.</p>
+<p><code class="docutils literal notranslate"><span class="pre">model_type</span></code> (<code class="docutils literal notranslate"><span class="pre">model.config.model_type</span></code>) scopes the registry lookup to the
+model’s own spec.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">

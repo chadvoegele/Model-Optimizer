@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>specs &mdash; Model Optimizer 0.0.1.dev1+g053507d7a</title>
+  <title>specs &mdash; Model Optimizer 0.0.1.dev1+g0146d99ca</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -173,12 +173,11 @@ It is composed from section mixins so each concern stays a small, separate class
 <ul class="simple">
 <li><p><strong>topic sections</strong> hold architecture facts shared across subsystems (<code class="docutils literal notranslate"><span class="pre">MoESpec</span></code>:
 what a model’s MoE blocks are; <code class="docutils literal notranslate"><span class="pre">NormSpec</span></code>: norm-layer conventions);</p></li>
-<li><p><strong>subsystem sections</strong> hold one subsystem’s per-model policy (<code class="docutils literal notranslate"><span class="pre">ExportSpec</span></code>;
-quantization / speculative-decoding sections to follow).</p></li>
+<li><p><strong>subsystem sections</strong> hold one subsystem’s per-model policy (<code class="docutils literal notranslate"><span class="pre">ExportSpec</span></code>).</p></li>
 </ul>
 <p>Sections hold per-model data plus trivial accessors over that data; subsystem logic
-never lives here. A model file registers exactly one <code class="docutils literal notranslate"><span class="pre">ModelSpec</span></code>, filling only the
-sections it customizes (see <code class="docutils literal notranslate"><span class="pre">models/</span></code>).</p>
+never lives here. A model registers exactly one <code class="docutils literal notranslate"><span class="pre">ModelSpec</span></code> in its sibling module,
+filling only the sections it customizes.</p>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
@@ -234,8 +233,8 @@ section holds decisions that belong to the export/quantization algorithms only.<
 <span class="pre">fuse_into,</span> <span class="pre">fuse_from)</span></code> triple: for a module whose class name contains one of the
 substrings, the pre_quant_scale on <code class="docutils literal notranslate"><span class="pre">fuse_from</span></code> is folded into <code class="docutils literal notranslate"><span class="pre">fuse_into</span></code>
 (e.g. attention <code class="docutils literal notranslate"><span class="pre">o_proj</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">v_proj</span></code>, MLP <code class="docutils literal notranslate"><span class="pre">down_proj</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">up_proj</span></code>).
-A rule is a validated mathematical-equivalence claim for that model’s modules,
-which is why it is declared per model rather than applied generically.</p>
+A rule asserts mathematical equivalence for that model’s modules, so it is
+declared per model rather than applied generically.</p>
 </dd></dl>
 
 </dd></dl>
@@ -348,18 +347,16 @@ rewritten module.</p>
 <dd><p>The (gate, up) pair among <code class="docutils literal notranslate"><span class="pre">expert_linear_names</span></code> that serving engines fuse
 into a single <code class="docutils literal notranslate"><span class="pre">gate_up_proj</span></code>, e.g. <code class="docutils literal notranslate"><span class="pre">(&quot;gate_proj&quot;,</span> <span class="pre">&quot;up_proj&quot;)</span></code> or
 <code class="docutils literal notranslate"><span class="pre">(&quot;w1&quot;,</span> <span class="pre">&quot;w3&quot;)</span></code>. <code class="docutils literal notranslate"><span class="pre">None</span></code> for non-gated experts (NemotronH) and already-fused
-layouts (GptOss, DBRX). Consumed by amax syncing before quantized export (see
-<code class="docutils literal notranslate"><span class="pre">sync_moe_gate_up_amax</span></code>) and by calibration grouping.</p>
+layouts (GptOss, DBRX).</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="modelopt.models.specs.MoEVariant.has_iterable_experts">
 <span class="sig-name descname"><span class="pre">has_iterable_experts</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#modelopt.models.specs.MoEVariant.has_iterable_experts" title="Link to this definition"></a></dt>
-<dd><p>True when experts are per-expert iterable sub-modules (Mixtral, Qwen MoE,
-NemotronH, Gemma4) and can be grouped by <code class="docutils literal notranslate"><span class="pre">get_experts_list</span></code>; False for stacked
-or fused layouts (DBRX, GptOss). NOTE: currently also doubles as the grouped-export
-support gate, so it is conservatively False for structurally iterable but
-unvalidated models (see <code class="docutils literal notranslate"><span class="pre">deepseek</span></code>).</p>
+<dd><p>True when experts are per-expert iterable sub-modules that
+<code class="docutils literal notranslate"><span class="pre">get_experts_list</span></code> can group (Mixtral, Qwen MoE, …); False for stacked or
+fused layouts (DBRX, GptOss) and for layouts not yet validated on the grouped
+export path.</p>
 </dd></dl>
 
 </dd></dl>
@@ -433,14 +430,9 @@ in the engine.</p>
 <dt class="sig sig-object py" id="modelopt.models.specs.match_class_names">
 <span class="sig-name descname"><span class="pre">match_class_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modelopt.models.specs.match_class_names" title="Link to this definition"></a></dt>
 <dd><p>Return True if any of <code class="docutils literal notranslate"><span class="pre">names</span></code> equals a class name in <code class="docutils literal notranslate"><span class="pre">module</span></code>’s MRO.</p>
-<p>Case-insensitive exact-name comparison against <code class="docutils literal notranslate"><span class="pre">cls.__name__</span></code> for every class
-in <code class="docutils literal notranslate"><span class="pre">type(module).__mro__</span></code> — the same semantics as the export dispatch
-registry’s string keys (<code class="docutils literal notranslate"><span class="pre">modelopt.torch.export.registry</span></code>). Dynamically
-generated quantized classes are subclasses of the original module class, so they
-match through their base; exact-name comparison avoids substring false
-positives. Comparison is case-insensitive because some registered names predate
-this registry and their casing was never exercised by the legacy substring
-matching.</p>
+<p>Case-insensitive exact-name comparison against every class in
+<code class="docutils literal notranslate"><span class="pre">type(module).__mro__</span></code>: dynamically generated quantized classes match through
+their base class, and exact names avoid substring false positives.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>names</strong> (<em>tuple</em><em>[</em><em>str</em><em>, </em><em>...</em><em>]</em>)</p>

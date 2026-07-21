@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>models &mdash; Model Optimizer 0.0.1.dev1+g053507d7a</title>
+  <title>models &mdash; Model Optimizer 0.0.1.dev1+g0146d99ca</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -170,7 +170,7 @@
 <td><p>DeepSeek-MoE specs (trust-remote-code model type <code class="docutils literal notranslate"><span class="pre">deepseek</span></code>).</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="modelopt.models.gemma.html#module-modelopt.models.gemma" title="modelopt.models.gemma"><code class="xref py py-obj docutils literal notranslate"><span class="pre">modelopt.models.gemma</span></code></a></p></td>
-<td><p>Gemma 1/2/3 specs (HF model types <code class="docutils literal notranslate"><span class="pre">gemma</span></code>/<code class="docutils literal notranslate"><span class="pre">gemma2</span></code>/<code class="docutils literal notranslate"><span class="pre">gemma3</span></code>).</p></td>
+<td><p>Gemma 1/2/3 specs (HF model types <code class="docutils literal notranslate"><span class="pre">gemma</span></code>/<code class="docutils literal notranslate"><span class="pre">gemma2</span></code>/<code class="docutils literal notranslate"><span class="pre">gemma3</span></code>); Gemma4 is in <code class="docutils literal notranslate"><span class="pre">gemma4.py</span></code>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="modelopt.models.gemma4.html#module-modelopt.models.gemma4" title="modelopt.models.gemma4"><code class="xref py py-obj docutils literal notranslate"><span class="pre">modelopt.models.gemma4</span></code></a></p></td>
 <td><p>Gemma4 specs (HF model type <code class="docutils literal notranslate"><span class="pre">gemma4</span></code>).</p></td>
@@ -214,13 +214,11 @@
 </tbody>
 </table>
 <p id="module-modelopt.models">Per-model descriptors, one module per HF model type.</p>
-<p>Module names mirror the <code class="docutils literal notranslate"><span class="pre">transformers.models</span></code> layout
-(<a class="reference external" href="https://github.com/huggingface/transformers/tree/main/src/transformers/models" rel="noopener noreferrer" target="_blank">https://github.com/huggingface/transformers/tree/main/src/transformers/models</a>);
-trust-remote-code models (<code class="docutils literal notranslate"><span class="pre">arctic</span></code>, <code class="docutils literal notranslate"><span class="pre">deepseek</span></code>) use their config <code class="docutils literal notranslate"><span class="pre">model_type</span></code>.
-Each model module registers one global <code class="docutils literal notranslate"><span class="pre">ModelSpec</span></code> (see <code class="docutils literal notranslate"><span class="pre">specs.py</span></code>); importing
-this package registers them all. Consumers resolve a spec via the registry lookups
-(<code class="docutils literal notranslate"><span class="pre">get_spec</span></code> / <code class="docutils literal notranslate"><span class="pre">match_moe_block</span></code>) and read its fields; an unmatched lookup
-returns <code class="docutils literal notranslate"><span class="pre">None</span></code> so callers fail loudly or fall back per their own policy.</p>
+<p>Module names mirror the <code class="docutils literal notranslate"><span class="pre">transformers.models</span></code> layout; trust-remote-code models
+(<code class="docutils literal notranslate"><span class="pre">arctic</span></code>, <code class="docutils literal notranslate"><span class="pre">deepseek</span></code>) use their config <code class="docutils literal notranslate"><span class="pre">model_type</span></code>. Each model module
+registers one global <code class="docutils literal notranslate"><span class="pre">ModelSpec</span></code> (see <code class="docutils literal notranslate"><span class="pre">specs.py</span></code>); importing this package
+registers them all. Consumers resolve a spec via the registry lookups
+(<code class="docutils literal notranslate"><span class="pre">get_spec</span></code> / <code class="docutils literal notranslate"><span class="pre">match_moe_block</span></code>) and read its fields.</p>
 </section>
 
 

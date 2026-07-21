@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>modelopt.torch.puzzletron.tools.bypassed_training.init_child_from_parent &mdash; Model Optimizer 0.0.1.dev1+g053507d7a</title>
+  <title>modelopt.torch.puzzletron.tools.bypassed_training.init_child_from_parent &mdash; Model Optimizer 0.0.1.dev1+g0146d99ca</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -115,7 +115,6 @@
 <li class="toctree-l4"><a class="reference internal" href="modelopt.torch.puzzletron.anymodel.html">anymodel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="modelopt.torch.puzzletron.block_config.html">block_config</a></li>
 <li class="toctree-l4"><a class="reference internal" href="modelopt.torch.puzzletron.build_library_and_stats.html">build_library_and_stats</a></li>
-<li class="toctree-l4"><a class="reference internal" href="modelopt.torch.puzzletron.bypass_distillation.html">bypass_distillation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="modelopt.torch.puzzletron.dataset.html">dataset</a></li>
 <li class="toctree-l4"><a class="reference internal" href="modelopt.torch.puzzletron.entrypoint.html">entrypoint</a></li>
 <li class="toctree-l4"><a class="reference internal" href="modelopt.torch.puzzletron.mip.html">mip</a></li>
@@ -180,8 +179,7 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="modelopt.torch.puzzletron.tools.bypassed_training.init_child_from_parent">
 <span class="sig-name descname"><span class="pre">init_child_from_parent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">descriptor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pruning_mixin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_checkpoint_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_config_overrides_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_checkpoint_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gqa_init_mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mlp_init_mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mlp_init_config_yaml</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linear_init_mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_size_init_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_importance_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_layer_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modelopt.torch.puzzletron.tools.bypassed_training.init_child_from_parent" title="Link to this definition"></a></dt>
-<dd><p>Init child models from parent models in the style of bypass training,
-but without having to run the entire bypass pipeline.</p>
+<dd><p>Initialize a child model from a parent model using AnyModel pruning.</p>
 <p>Uses AnyModel approach with deci_x_patcher for heterogeneous layer configurations.</p>
 <p>I/O Optimization Parameters:
 - max_workers: Number of threads for parallel file I/O (default: auto-calculate min(CPU count, num files))

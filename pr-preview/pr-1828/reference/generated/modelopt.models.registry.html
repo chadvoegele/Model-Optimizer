@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>registry &mdash; Model Optimizer 0.0.1.dev1+g053507d7a</title>
+  <title>registry &mdash; Model Optimizer 0.0.1.dev1+g0146d99ca</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -169,12 +169,10 @@
   <section id="registry">
 <h1>registry<a class="headerlink" href="#registry" title="Link to this heading"></a></h1>
 <p id="module-modelopt.models.registry">Registry indexing the per-model <code class="docutils literal notranslate"><span class="pre">ModelSpec</span></code> by HF model type.</p>
-<p>Model modules register their spec at import time (see <code class="docutils literal notranslate"><span class="pre">models/</span></code>); one spec per
-model type. Lookups return <code class="docutils literal notranslate"><span class="pre">None</span></code> (or an empty list) when nothing matches, so
-callers can fail loudly or fall back per their own policy.</p>
-<p>Matching is by model-type and class-name strings only, so this package stays
-dependency-free (any <code class="docutils literal notranslate"><span class="pre">nn.Module</span></code> — or any object — can be passed to the lookups
-without importing torch here).</p>
+<p>Model modules register their spec at import time; one spec per model type. Lookups
+return <code class="docutils literal notranslate"><span class="pre">None</span></code> (or an empty list) when nothing matches, so callers can fail loudly
+or fall back per their own policy. Matching is by model-type and class-name strings
+only, so this package needs no torch import.</p>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
@@ -182,7 +180,7 @@ without importing torch here).</p>
 <td><p>Return the spec registered for <code class="docutils literal notranslate"><span class="pre">model_type</span></code>, or <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#modelopt.models.registry.get_specs" title="modelopt.models.registry.get_specs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_specs</span></code></a></p></td>
-<td><p>Return all registered specs, in registration order (aggregators, tests).</p></td>
+<td><p>Return all registered specs, in registration order.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#modelopt.models.registry.hf_model_type" title="modelopt.models.registry.hf_model_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hf_model_type</span></code></a></p></td>
 <td><p>Return the root HF model type (<code class="docutils literal notranslate"><span class="pre">model.config.model_type</span></code>), or <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></td>
@@ -191,7 +189,7 @@ without importing torch here).</p>
 <td><p>Yield the distinct (gate, up) projection-name pairs across all MoE variants.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#modelopt.models.registry.iter_pqs_fuse_rules" title="modelopt.models.registry.iter_pqs_fuse_rules"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iter_pqs_fuse_rules</span></code></a></p></td>
-<td><p>Yield every <code class="docutils literal notranslate"><span class="pre">(module_class_substrings,</span> <span class="pre">fuse_into,</span> <span class="pre">fuse_from)</span></code> AWQ fusion rule.</p></td>
+<td><p>Yield each spec's <code class="docutils literal notranslate"><span class="pre">(module_class_substrings,</span> <span class="pre">fuse_into,</span> <span class="pre">fuse_from)</span></code> AWQ fusion rules.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#modelopt.models.registry.match_moe_block" title="modelopt.models.registry.match_moe_block"><code class="xref py py-obj docutils literal notranslate"><span class="pre">match_moe_block</span></code></a></p></td>
 <td><p>Return the MoE layout variant for <code class="docutils literal notranslate"><span class="pre">module</span></code>, resolved by model type.</p></td>
@@ -221,7 +219,7 @@ without importing torch here).</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="modelopt.models.registry.get_specs">
 <span class="sig-name descname"><span class="pre">get_specs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#modelopt.models.registry.get_specs" title="Link to this definition"></a></dt>
-<dd><p>Return all registered specs, in registration order (aggregators, tests).</p>
+<dd><p>Return all registered specs, in registration order.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><em>list</em>[<a class="reference internal" href="modelopt.models.specs.html#modelopt.models.specs.ModelSpec" title="modelopt.models.specs.ModelSpec"><em>ModelSpec</em></a>]</p>
@@ -233,9 +231,8 @@ without importing torch here).</p>
 <dt class="sig sig-object py" id="modelopt.models.registry.hf_model_type">
 <span class="sig-name descname"><span class="pre">hf_model_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modelopt.models.registry.hf_model_type" title="Link to this definition"></a></dt>
 <dd><p>Return the root HF model type (<code class="docutils literal notranslate"><span class="pre">model.config.model_type</span></code>), or <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
-<p>Accepts a model or a config object (duck-typed, no transformers import): a
-model contributes via its <code class="docutils literal notranslate"><span class="pre">config</span></code> attribute, a config via its own
-<code class="docutils literal notranslate"><span class="pre">model_type</span></code>. This is the key for <code class="docutils literal notranslate"><span class="pre">get_spec</span></code> / <code class="docutils literal notranslate"><span class="pre">match_moe_block</span></code>.</p>
+<p>Accepts a model or a config object (duck-typed, no transformers import). This
+is the key for <code class="docutils literal notranslate"><span class="pre">get_spec</span></code> / <code class="docutils literal notranslate"><span class="pre">match_moe_block</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><em>str</em> | <em>None</em></p>
@@ -247,14 +244,11 @@ model contributes via its <code class="docutils literal notranslate"><span class
 <dt class="sig sig-object py" id="modelopt.models.registry.iter_gate_up_pairs">
 <span class="sig-name descname"><span class="pre">iter_gate_up_pairs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#modelopt.models.registry.iter_gate_up_pairs" title="Link to this definition"></a></dt>
 <dd><p>Yield the distinct (gate, up) projection-name pairs across all MoE variants.</p>
-<p>GLOBAL-VOCABULARY semantics: consumers (currently only calibration sibling
-grouping in <code class="docutils literal notranslate"><span class="pre">quantization/model_calib.py</span></code>, which also walks dense MLPs that
-no MoE variant can match) try every pair opportunistically on every module,
-getattr-guarded. Adding a pair to any spec therefore changes behavior for ALL
-models whose modules happen to carry those attribute names — prefer per-module
-resolution (<code class="docutils literal notranslate"><span class="pre">match_moe_block(module).gate_up_pair</span></code>) wherever the module is an
-identifiable MoE block. The dense-MLP case moves to a fusion-group topic
-section in a follow-up (see MODEL_SPECIFIC_REFACTOR.md P5).</p>
+<p>Global-vocabulary semantics: consumers try every pair on every module,
+getattr-guarded, so adding a pair to any spec affects all models whose modules
+carry those attribute names. Prefer per-module resolution
+(<code class="docutils literal notranslate"><span class="pre">match_moe_block(module).gate_up_pair</span></code>) wherever the module is an
+identifiable MoE block.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><em>Iterator</em>[<em>tuple</em>[<em>str</em>, <em>str</em>]]</p>
@@ -265,26 +259,19 @@ section in a follow-up (see MODEL_SPECIFIC_REFACTOR.md P5).</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="modelopt.models.registry.iter_pqs_fuse_rules">
 <span class="sig-name descname"><span class="pre">iter_pqs_fuse_rules</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#modelopt.models.registry.iter_pqs_fuse_rules" title="Link to this definition"></a></dt>
-<dd><p>Yield every <code class="docutils literal notranslate"><span class="pre">(module_class_substrings,</span> <span class="pre">fuse_into,</span> <span class="pre">fuse_from)</span></code> AWQ fusion rule.</p>
-<p>Aggregated across all registered specs (the consumer matches each model module
-against the substrings, so the order across specs does not matter).</p>
+<dd><p>Yield each spec’s <code class="docutils literal notranslate"><span class="pre">(module_class_substrings,</span> <span class="pre">fuse_into,</span> <span class="pre">fuse_from)</span></code> AWQ fusion rules.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="modelopt.models.registry.match_moe_block">
 <span class="sig-name descname"><span class="pre">match_moe_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modelopt.models.registry.match_moe_block" title="Link to this definition"></a></dt>
 <dd><p>Return the MoE layout variant for <code class="docutils literal notranslate"><span class="pre">module</span></code>, resolved by model type.</p>
-<p><code class="docutils literal notranslate"><span class="pre">model_type</span></code> is the model’s root HF type (<code class="docutils literal notranslate"><span class="pre">model.config.model_type</span></code>) and is
-a strict filter: only that model’s own spec is consulted. A model whose
-model_type has no spec resolves to <code class="docutils literal notranslate"><span class="pre">None</span></code> even if its module class names
-coincide with another model’s — register a spec instead of inheriting a
-neighbor’s data. <code class="docutils literal notranslate"><span class="pre">None</span></code> (no config available: unit tests, the TRT-LLM path)
-searches all specs. Sub-model types of composite models are not walked today;
-a composite whose MoE lives under a tower type registers the root type too
-(see <code class="docutils literal notranslate"><span class="pre">gemma4.py</span></code>).</p>
-<p>Within the spec, variant <code class="docutils literal notranslate"><span class="pre">block_names</span></code> identifies the block and disambiguates
-same-model layout variants (<code class="docutils literal notranslate"><span class="pre">MoESpec.match_moe_variant</span></code>); quantized wrapper
-classes match through their original base class in the MRO.</p>
+<p><code class="docutils literal notranslate"><span class="pre">model_type</span></code> (the root <code class="docutils literal notranslate"><span class="pre">model.config.model_type</span></code>) is a strict filter: only
+that model’s own spec is consulted, and an unregistered model type resolves to
+<code class="docutils literal notranslate"><span class="pre">None</span></code> even if the module’s class names coincide with another model’s.
+<code class="docutils literal notranslate"><span class="pre">model_type=None</span></code> searches all specs. A composite model whose MoE lives under
+a sub-model type registers the root type too (see <code class="docutils literal notranslate"><span class="pre">gemma4.py</span></code>). Within the
+spec, variant <code class="docutils literal notranslate"><span class="pre">block_names</span></code> matched against the module’s MRO picks the layout.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">

@@ -87,6 +87,7 @@ utils
       remove_weights_data
       save_onnx
       save_onnx_bytes_to_dir
+      topologically_sort_graph_nodes
       update_domain
       validate_batch_size
       validate_onnx
