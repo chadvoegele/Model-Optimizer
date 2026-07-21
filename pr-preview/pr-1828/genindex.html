@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; Model Optimizer 0.0.1.dev1+g0146d99ca</title>
+  <title>Index &mdash; Model Optimizer 0.0.1.dev1+gc98e35fae</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -1223,6 +1223,8 @@
 
       <ul>
         <li><a href="reference/generated/modelopt.torch.quantization.calib.histogram.html#modelopt.torch.quantization.calib.histogram.HistogramCalibrator.collect">(HistogramCalibrator method)</a>
+</li>
+        <li><a href="reference/generated/modelopt.models.registry.html#modelopt.models.registry.collect">(in module modelopt.models.registry)</a>
 </li>
         <li><a href="reference/generated/modelopt.torch.quantization.calib.max.html#modelopt.torch.quantization.calib.max.MaxCalibrator.collect">(MaxCalibrator method)</a>
 </li>
@@ -2739,6 +2741,8 @@
 </li>
       <li><a href="reference/generated/modelopt.models.specs.html#modelopt.models.specs.MoEVariant.gate_up_pair">gate_up_pair (MoEVariant attribute)</a>
 </li>
+      <li><a href="reference/generated/modelopt.models.specs.html#modelopt.models.specs.MoESpec.gate_up_pairs">gate_up_pairs (MoESpec property)</a>
+</li>
       <li><a href="reference/generated/modelopt.torch.export.tensorrt_llm_type.html#modelopt.torch.export.tensorrt_llm_type.MLPType.GatedMLP">GatedMLP (MLPType attribute)</a>
 </li>
       <li><a href="reference/generated/modelopt.deploy.llm.generate.html#modelopt.deploy.llm.generate.LLM.gather_context_logits">gather_context_logits (LLM property)</a>
@@ -3581,10 +3585,10 @@
 </li>
       <li><a href="reference/generated/modelopt.onnx.op_types.html#modelopt.onnx.op_types.is_conversion_op">is_conversion_op() (in module modelopt.onnx.op_types)</a>
 </li>
-      <li><a href="reference/generated/modelopt.torch.opt.conversion.html#modelopt.torch.opt.conversion.ModeloptStateManager.is_converted">is_converted() (ModeloptStateManager class method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/modelopt.torch.opt.conversion.html#modelopt.torch.opt.conversion.ModeloptStateManager.is_converted">is_converted() (ModeloptStateManager class method)</a>
+</li>
       <li><a href="reference/generated/modelopt.onnx.op_types.html#modelopt.onnx.op_types.is_copy_op">is_copy_op() (in module modelopt.onnx.op_types)</a>
 </li>
       <li><a href="reference/generated/modelopt.torch.trace.symbols.html#modelopt.torch.trace.symbols.Symbol.is_cross_layer">is_cross_layer (Symbol property)</a>
@@ -3805,11 +3809,7 @@
         <li><a href="reference/generated/modelopt.torch.trace.symbols.html#modelopt.torch.trace.symbols.SymMap.items">(SymMap method)</a>
 </li>
       </ul></li>
-      <li><a href="reference/generated/modelopt.models.registry.html#modelopt.models.registry.iter_gate_up_pairs">iter_gate_up_pairs() (in module modelopt.models.registry)</a>
-</li>
       <li><a href="reference/generated/modelopt.torch.nas.autonas.html#modelopt.torch.nas.autonas.IterativeSearcher.iter_num">iter_num (IterativeSearcher attribute)</a>
-</li>
-      <li><a href="reference/generated/modelopt.models.registry.html#modelopt.models.registry.iter_pqs_fuse_rules">iter_pqs_fuse_rules() (in module modelopt.models.registry)</a>
 </li>
       <li><a href="reference/generated/modelopt.torch.quantization.utils.html#modelopt.torch.quantization.utils.iter_shared_quant_states">iter_shared_quant_states() (in module modelopt.torch.quantization.utils)</a>
 </li>
@@ -10704,8 +10704,6 @@
       <li><a href="reference/generated/modelopt.torch.kernels.quantization.gemm.fp8_kernel.html#modelopt.torch.kernels.quantization.gemm.fp8_kernel.weight_dequant">weight_dequant() (in module modelopt.torch.kernels.quantization.gemm.fp8_kernel)</a>
 </li>
       <li><a href="reference/generated/modelopt.models.specs.html#modelopt.models.specs.NormSpec.weight_plus_one_norm_names">weight_plus_one_norm_names (NormSpec attribute)</a>
-</li>
-      <li><a href="reference/generated/modelopt.models.registry.html#modelopt.models.registry.weight_plus_one_norm_names">weight_plus_one_norm_names() (in module modelopt.models.registry)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
