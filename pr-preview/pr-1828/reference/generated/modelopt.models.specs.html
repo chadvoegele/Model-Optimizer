@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>specs &mdash; Model Optimizer 0.0.1.dev1+gc98e35fae</title>
+  <title>specs &mdash; Model Optimizer 0.0.1.dev1+g81d54cf83</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -122,6 +122,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#modelopt.models.specs.MoEVariant"><code class="docutils literal notranslate"><span class="pre">MoEVariant</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#modelopt.models.specs.ModelSpec"><code class="docutils literal notranslate"><span class="pre">ModelSpec</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#modelopt.models.specs.NormSpec"><code class="docutils literal notranslate"><span class="pre">NormSpec</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#modelopt.models.specs.collectable_field"><code class="docutils literal notranslate"><span class="pre">collectable_field()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#modelopt.models.specs.collectable_property"><code class="docutils literal notranslate"><span class="pre">collectable_property()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#modelopt.models.specs.match_class_names"><code class="docutils literal notranslate"><span class="pre">match_class_names()</span></code></a></li>
 </ul>
 </li>
@@ -201,6 +203,12 @@ filling only the sections it customizes.</p>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#modelopt.models.specs.collectable_field" title="modelopt.models.specs.collectable_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">collectable_field</span></code></a></p></td>
+<td><p>Declare a spec field whose values may be aggregated across all registered specs.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#modelopt.models.specs.collectable_property" title="modelopt.models.specs.collectable_property"><code class="xref py py-obj docutils literal notranslate"><span class="pre">collectable_property</span></code></a></p></td>
+<td><p>Like <code class="docutils literal notranslate"><span class="pre">collectable_field</span></code>, for derived (property) spec attributes.</p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#modelopt.models.specs.match_class_names" title="modelopt.models.specs.match_class_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">match_class_names</span></code></a></p></td>
 <td><p>Return True if any of <code class="docutils literal notranslate"><span class="pre">names</span></code> equals a class name in <code class="docutils literal notranslate"><span class="pre">module</span></code>'s MRO.</p></td>
 </tr>
@@ -392,6 +400,17 @@ one instance, filling only the sections it customizes.</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="modelopt.models.specs.ModelSpec.collectable_names">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">collectable_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#modelopt.models.specs.ModelSpec.collectable_names" title="Link to this definition"></a></dt>
+<dd><p>Attribute names declared collectable (see <code class="docutils literal notranslate"><span class="pre">collectable_field</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>frozenset</em>[<em>str</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="modelopt.models.specs.ModelSpec.model_type">
 <span class="sig-name descname"><span class="pre">model_type</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#modelopt.models.specs.ModelSpec.model_type" title="Link to this definition"></a></dt>
@@ -430,6 +449,20 @@ pre_quant_scale fusion). A structural fallback (<code class="docutils literal no
 in the engine.</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="modelopt.models.specs.collectable_field">
+<span class="sig-name descname"><span class="pre">collectable_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modelopt.models.specs.collectable_field" title="Link to this definition"></a></dt>
+<dd><p>Declare a spec field whose values may be aggregated across all registered specs.</p>
+<p>Marked fields (and <code class="docutils literal notranslate"><span class="pre">collectable_property</span></code> attributes) are the only ones
+<code class="docutils literal notranslate"><span class="pre">registry.list_all_possible</span></code> accepts.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="modelopt.models.specs.collectable_property">
+<span class="sig-name descname"><span class="pre">collectable_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modelopt.models.specs.collectable_property" title="Link to this definition"></a></dt>
+<dd><p>Like <code class="docutils literal notranslate"><span class="pre">collectable_field</span></code>, for derived (property) spec attributes.</p>
 </dd></dl>
 
 <dl class="py function">

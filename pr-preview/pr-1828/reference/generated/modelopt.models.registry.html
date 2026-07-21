@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>registry &mdash; Model Optimizer 0.0.1.dev1+gc98e35fae</title>
+  <title>registry &mdash; Model Optimizer 0.0.1.dev1+g81d54cf83</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -116,10 +116,10 @@
 <li class="toctree-l3"><a class="reference internal" href="modelopt.models.qwen3_moe.html">qwen3_moe</a></li>
 <li class="toctree-l3"><a class="reference internal" href="modelopt.models.qwen3_next.html">qwen3_next</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">registry</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#modelopt.models.registry.collect"><code class="docutils literal notranslate"><span class="pre">collect()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#modelopt.models.registry.get_spec"><code class="docutils literal notranslate"><span class="pre">get_spec()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#modelopt.models.registry.get_specs"><code class="docutils literal notranslate"><span class="pre">get_specs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#modelopt.models.registry.hf_model_type"><code class="docutils literal notranslate"><span class="pre">hf_model_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#modelopt.models.registry.list_all_possible"><code class="docutils literal notranslate"><span class="pre">list_all_possible()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#modelopt.models.registry.match_moe_block"><code class="docutils literal notranslate"><span class="pre">match_moe_block()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#modelopt.models.registry.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
 </ul>
@@ -174,17 +174,17 @@ only, so this package needs no torch import.</p>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#modelopt.models.registry.collect" title="modelopt.models.registry.collect"><code class="xref py py-obj docutils literal notranslate"><span class="pre">collect</span></code></a></p></td>
-<td><p>Aggregate a spec field across all registered specs, deduplicated in order.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#modelopt.models.registry.get_spec" title="modelopt.models.registry.get_spec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_spec</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#modelopt.models.registry.get_spec" title="modelopt.models.registry.get_spec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_spec</span></code></a></p></td>
 <td><p>Return the spec registered for <code class="docutils literal notranslate"><span class="pre">model_type</span></code>, or <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#modelopt.models.registry.get_specs" title="modelopt.models.registry.get_specs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_specs</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#modelopt.models.registry.get_specs" title="modelopt.models.registry.get_specs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_specs</span></code></a></p></td>
 <td><p>Return all registered specs, in registration order.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#modelopt.models.registry.hf_model_type" title="modelopt.models.registry.hf_model_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hf_model_type</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#modelopt.models.registry.hf_model_type" title="modelopt.models.registry.hf_model_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hf_model_type</span></code></a></p></td>
 <td><p>Return the root HF model type (<code class="docutils literal notranslate"><span class="pre">model.config.model_type</span></code>), or <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#modelopt.models.registry.list_all_possible" title="modelopt.models.registry.list_all_possible"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_all_possible</span></code></a></p></td>
+<td><p>List every registered value of a collectable spec attribute, deduplicated in order.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#modelopt.models.registry.match_moe_block" title="modelopt.models.registry.match_moe_block"><code class="xref py py-obj docutils literal notranslate"><span class="pre">match_moe_block</span></code></a></p></td>
 <td><p>Return the MoE layout variant for <code class="docutils literal notranslate"><span class="pre">module</span></code>, resolved by model type.</p></td>
@@ -194,25 +194,6 @@ only, so this package needs no torch import.</p>
 </tr>
 </tbody>
 </table>
-<dl class="py function">
-<dt class="sig sig-object py" id="modelopt.models.registry.collect">
-<span class="sig-name descname"><span class="pre">collect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modelopt.models.registry.collect" title="Link to this definition"></a></dt>
-<dd><p>Aggregate a spec field across all registered specs, deduplicated in order.</p>
-<p><code class="docutils literal notranslate"><span class="pre">collect(lambda</span> <span class="pre">spec:</span> <span class="pre">spec.pqs_fuse_rules)</span></code> flattens the field over every
-spec. The result is a global vocabulary: consumers match it against any model’s
-modules, so adding a value to one spec affects all models the consumer walks —
-prefer <code class="docutils literal notranslate"><span class="pre">get_spec(model_type)</span></code> / <code class="docutils literal notranslate"><span class="pre">match_moe_block</span></code> wherever the owning model
-is identifiable.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>getter</strong> (<em>Callable</em><em>[</em><em>[</em><a class="reference internal" href="modelopt.models.specs.html#modelopt.models.specs.ModelSpec" title="modelopt.models.specs.ModelSpec"><em>ModelSpec</em></a><em>]</em><em>, </em><em>Iterable</em><em>[</em><em>T</em><em>]</em><em>]</em>)</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>tuple</em>[<em>T</em>, …]</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py function">
 <dt class="sig sig-object py" id="modelopt.models.registry.get_spec">
 <span class="sig-name descname"><span class="pre">get_spec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modelopt.models.registry.get_spec" title="Link to this definition"></a></dt>
@@ -247,6 +228,26 @@ is the key for <code class="docutils literal notranslate"><span class="pre">get_
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><em>str</em> | <em>None</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="modelopt.models.registry.list_all_possible">
+<span class="sig-name descname"><span class="pre">list_all_possible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modelopt.models.registry.list_all_possible" title="Link to this definition"></a></dt>
+<dd><p>List every registered value of a collectable spec attribute, deduplicated in order.</p>
+<p><code class="docutils literal notranslate"><span class="pre">attr</span></code> must be declared collectable on <code class="docutils literal notranslate"><span class="pre">ModelSpec</span></code> (<code class="docutils literal notranslate"><span class="pre">collectable_field</span></code> /
+<code class="docutils literal notranslate"><span class="pre">collectable_property</span></code>), e.g. <code class="docutils literal notranslate"><span class="pre">list_all_possible(&quot;gate_up_pairs&quot;)</span></code>. The
+result is a global vocabulary: consumers match it against any model’s modules,
+so adding a value to one spec affects all models the consumer walks — prefer
+<code class="docutils literal notranslate"><span class="pre">get_spec(model_type)</span></code> / <code class="docutils literal notranslate"><span class="pre">match_moe_block</span></code> wherever the owning model is
+identifiable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>attr</strong> (<em>str</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>tuple</em></p>
 </dd>
 </dl>
 </dd></dl>

@@ -37,10 +37,10 @@ registry
    .. autosummary::
       :nosignatures:
    
-      collect
       get_spec
       get_specs
       hf_model_type
+      list_all_possible
       match_moe_block
       register
    

@@ -48,6 +48,8 @@ specs
    .. autosummary::
       :nosignatures:
    
+      collectable_field
+      collectable_property
       match_class_names
    
    
