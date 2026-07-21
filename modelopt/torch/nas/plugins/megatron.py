@@ -88,6 +88,9 @@ except ImportError:
 # returns the first match in insertion order: MambaModel is registered first, so
 # MambaModel instances dispatch to MambaModel whether or not MambaModel overrides forward.
 try:
+    from megatron.core.models.hybrid.hybrid_layer_specs import (
+        hybrid_stack_spec as _te_hybrid_stack_spec,
+    )
     from megatron.core.models.hybrid.hybrid_model import HybridModel
 
     SUPPORTED_MODELS[HybridModel] = "megatron.core.models.hybrid.HybridModel"
@@ -99,11 +102,11 @@ except ImportError:
 # Attention module types that _DynamicTransformerLayer converts.
 _ATTENTION_TYPES: tuple[type, ...] = (SelfAttention, MLASelfAttention, GatedDeltaNet)
 
-__all__ = ["get_te_mamba_stack_spec"]
+__all__ = ["get_te_hybrid_stack_spec", "get_te_mamba_stack_spec"]
 
 
 def get_te_mamba_stack_spec(moe_grouped_gemm: bool = False) -> ModuleSpec:
-    """Return the TE Mamba stack spec."""
+    """[Deprecated] Return the TE Mamba stack spec."""
     assert HAS_MAMBA
     if moe_grouped_gemm:
         return _te_mamba_stack_spec
@@ -116,6 +119,21 @@ def get_te_mamba_stack_spec(moe_grouped_gemm: bool = False) -> ModuleSpec:
         use_te=True, num_experts=8, moe_grouped_gemm=False
     )
     return te_mamba_stack_spec
+
+
+def get_te_hybrid_stack_spec(moe_grouped_gemm: bool = False) -> ModuleSpec:
+    """Return the TE Hybrid stack spec."""
+    assert HAS_HYBRID
+    if moe_grouped_gemm:
+        return _te_hybrid_stack_spec
+
+    # The upstream TE hybrid stack spec hardcodes TEGroupedMLP for MoE.
+    # Replace it with SequentialMLP (TE linear layers, no grouped gemm dependency).
+    te_hybrid_stack_spec = copy.deepcopy(_te_hybrid_stack_spec)
+    te_hybrid_stack_spec.submodules.moe_layer.submodules.mlp = get_moe_module_spec(
+        use_te=True, num_experts=8, moe_grouped_gemm=False
+    )
+    return te_hybrid_stack_spec
 
 
 # Local Parallel Linear DynamicModules ##########################################################################
