@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>dataset_utils &mdash; Model Optimizer 0.0.1.dev1+gb93880909</title>
+  <title>dataset_utils &mdash; Model Optimizer 0.0.1.dev1+geb1ecd150</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -320,7 +320,7 @@ an <code class="docutils literal notranslate"><span class="pre">int</span></code
 <li><p><strong>batch_size</strong> (<em>int</em>) – Batch size of the returned dataloader.</p></li>
 <li><p><strong>num_samples</strong> (<em>int</em><em> | </em><em>list</em><em>[</em><em>int</em><em>]</em>) – Number of samples from the dataset (interpreted as number of <em>output
 rows</em> in both <code class="docutils literal notranslate"><span class="pre">pack=False</span></code> and <code class="docutils literal notranslate"><span class="pre">pack=True</span></code> modes — in packed mode the
-loader oversamples raw text 4x to ensure enough docs to fill all rows).</p></li>
+loader oversamples raw text 16x to ensure enough docs to fill all rows).</p></li>
 <li><p><strong>max_sample_length</strong> (<em>int</em>) – Maximum length of a sample (or per-row length under <code class="docutils literal notranslate"><span class="pre">pack=True</span></code>).</p></li>
 <li><p><strong>device</strong> (<em>device</em><em> | </em><em>str</em><em> | </em><em>None</em>) – Target device for the returned dataloader.</p></li>
 <li><p><strong>include_labels</strong> (<em>bool</em>) – Whether to include labels in the dataloader (ignored when
