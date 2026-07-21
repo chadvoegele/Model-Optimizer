@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>specs &mdash; Model Optimizer 0.0.1.dev1+g81d54cf83</title>
+  <title>specs &mdash; Model Optimizer 0.0.1.dev1+gd403eb6b9</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -121,9 +121,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#modelopt.models.specs.MoESpec"><code class="docutils literal notranslate"><span class="pre">MoESpec</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#modelopt.models.specs.MoEVariant"><code class="docutils literal notranslate"><span class="pre">MoEVariant</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#modelopt.models.specs.ModelSpec"><code class="docutils literal notranslate"><span class="pre">ModelSpec</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#modelopt.models.specs.NormSpec"><code class="docutils literal notranslate"><span class="pre">NormSpec</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#modelopt.models.specs.collectable_field"><code class="docutils literal notranslate"><span class="pre">collectable_field()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#modelopt.models.specs.collectable_property"><code class="docutils literal notranslate"><span class="pre">collectable_property()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#modelopt.models.specs.match_class_names"><code class="docutils literal notranslate"><span class="pre">match_class_names()</span></code></a></li>
 </ul>
 </li>
@@ -174,8 +171,8 @@ about a model type lives on a single instance, resolved by <code class="docutils
 It is composed from section mixins so each concern stays a small, separate class:</p>
 <ul class="simple">
 <li><p><strong>topic sections</strong> hold architecture facts shared across subsystems (<code class="docutils literal notranslate"><span class="pre">MoESpec</span></code>:
-what a model’s MoE blocks are; <code class="docutils literal notranslate"><span class="pre">NormSpec</span></code>: norm-layer conventions);</p></li>
-<li><p><strong>subsystem sections</strong> hold one subsystem’s per-model policy (<code class="docutils literal notranslate"><span class="pre">ExportSpec</span></code>).</p></li>
+what a model’s MoE blocks are);</p></li>
+<li><p><strong>subsystem sections</strong> hold one subsystem’s per-model data (<code class="docutils literal notranslate"><span class="pre">ExportSpec</span></code>).</p></li>
 </ul>
 <p>Sections hold per-model data plus trivial accessors over that data; subsystem logic
 never lives here. A model registers exactly one <code class="docutils literal notranslate"><span class="pre">ModelSpec</span></code> in its sibling module,
@@ -184,7 +181,7 @@ filling only the sections it customizes.</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#modelopt.models.specs.ExportSpec" title="modelopt.models.specs.ExportSpec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExportSpec</span></code></a></p></td>
-<td><p>Subsystem section: per-model policy of the unified HF export path.</p></td>
+<td><p>Subsystem section: per-model data of the unified HF export path.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#modelopt.models.specs.MoESpec" title="modelopt.models.specs.MoESpec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MoESpec</span></code></a></p></td>
 <td><p>Topic section: MoE architecture facts — the model's MoE-block layout(s).</p></td>
@@ -195,20 +192,11 @@ filling only the sections it customizes.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#modelopt.models.specs.ModelSpec" title="modelopt.models.specs.ModelSpec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ModelSpec</span></code></a></p></td>
 <td><p>The one global per-model descriptor, composed from the section mixins.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#modelopt.models.specs.NormSpec" title="modelopt.models.specs.NormSpec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NormSpec</span></code></a></p></td>
-<td><p>Topic section: normalization-layer architecture facts.</p></td>
-</tr>
 </tbody>
 </table>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#modelopt.models.specs.collectable_field" title="modelopt.models.specs.collectable_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">collectable_field</span></code></a></p></td>
-<td><p>Declare a spec field whose values may be aggregated across all registered specs.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#modelopt.models.specs.collectable_property" title="modelopt.models.specs.collectable_property"><code class="xref py py-obj docutils literal notranslate"><span class="pre">collectable_property</span></code></a></p></td>
-<td><p>Like <code class="docutils literal notranslate"><span class="pre">collectable_field</span></code>, for derived (property) spec attributes.</p></td>
-</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#modelopt.models.specs.match_class_names" title="modelopt.models.specs.match_class_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">match_class_names</span></code></a></p></td>
 <td><p>Return True if any of <code class="docutils literal notranslate"><span class="pre">names</span></code> equals a class name in <code class="docutils literal notranslate"><span class="pre">module</span></code>'s MRO.</p></td>
 </tr>
@@ -218,15 +206,18 @@ filling only the sections it customizes.</p>
 <dt class="sig sig-object py" id="modelopt.models.specs.ExportSpec">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ExportSpec</span></span><a class="headerlink" href="#modelopt.models.specs.ExportSpec" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Subsystem section: per-model policy of the unified HF export path.</p>
+<p>Subsystem section: per-model data of the unified HF export path.</p>
 <p>Architecture facts (MoE block classes, expert naming) live in <code class="docutils literal notranslate"><span class="pre">MoESpec</span></code>; this
-section holds decisions that belong to the export/quantization algorithms only.</p>
+section holds data consumed by the export algorithms only.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="modelopt.models.specs.ExportSpec.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">pqs_fuse_rules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modelopt.models.specs.ExportSpec.__init__" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">pqs_fuse_rules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_plus_one_norm_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modelopt.models.specs.ExportSpec.__init__" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>pqs_fuse_rules</strong> (<em>tuple</em><em>[</em><em>tuple</em><em>[</em><em>tuple</em><em>[</em><em>str</em><em>, </em><em>...</em><em>]</em><em>, </em><em>str</em><em>, </em><em>str</em><em>]</em><em>, </em><em>...</em><em>]</em>)</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pqs_fuse_rules</strong> (<em>tuple</em><em>[</em><em>tuple</em><em>[</em><em>tuple</em><em>[</em><em>str</em><em>, </em><em>...</em><em>]</em><em>, </em><em>str</em><em>, </em><em>str</em><em>]</em><em>, </em><em>...</em><em>]</em>)</p></li>
+<li><p><strong>weight_plus_one_norm_names</strong> (<em>tuple</em><em>[</em><em>str</em><em>, </em><em>...</em><em>]</em>)</p></li>
+</ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>None</em></p>
@@ -243,6 +234,17 @@ substrings, the pre_quant_scale on <code class="docutils literal notranslate"><s
 (e.g. attention <code class="docutils literal notranslate"><span class="pre">o_proj</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">v_proj</span></code>, MLP <code class="docutils literal notranslate"><span class="pre">down_proj</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">up_proj</span></code>).
 A rule asserts mathematical equivalence for that model’s modules, so it is
 declared per model rather than applied generically.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="modelopt.models.specs.ExportSpec.weight_plus_one_norm_names">
+<span class="sig-name descname"><span class="pre">weight_plus_one_norm_names</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></span><a class="headerlink" href="#modelopt.models.specs.ExportSpec.weight_plus_one_norm_names" title="Link to this definition"></a></dt>
+<dd><p>Class names of norm layers whose stored weight is <code class="docutils literal notranslate"><span class="pre">w</span> <span class="pre">-</span> <span class="pre">1</span></code> (the effective
+scale is <code class="docutils literal notranslate"><span class="pre">weight</span> <span class="pre">+</span> <span class="pre">1</span></code>), e.g. Gemma’s RMSNorm variants and LayerNorm1P.
+Matched against a norm module’s MRO (case-insensitive exact names). Export
+must account for the +1 when folding scales into the norm weight (AWQ
+pre_quant_scale fusion). A structural fallback (<code class="docutils literal notranslate"><span class="pre">zero_centered_gamma</span></code>) stays
+in the engine.</p>
 </dd></dl>
 
 </dd></dl>
@@ -378,7 +380,7 @@ export path.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="modelopt.models.specs.ModelSpec">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ModelSpec</span></span><a class="headerlink" href="#modelopt.models.specs.ModelSpec" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#modelopt.models.specs.MoESpec" title="modelopt.models.specs.MoESpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">MoESpec</span></code></a>, <a class="reference internal" href="#modelopt.models.specs.NormSpec" title="modelopt.models.specs.NormSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">NormSpec</span></code></a>, <a class="reference internal" href="#modelopt.models.specs.ExportSpec" title="modelopt.models.specs.ExportSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExportSpec</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#modelopt.models.specs.MoESpec" title="modelopt.models.specs.MoESpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">MoESpec</span></code></a>, <a class="reference internal" href="#modelopt.models.specs.ExportSpec" title="modelopt.models.specs.ExportSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExportSpec</span></code></a></p>
 <p>The one global per-model descriptor, composed from the section mixins.</p>
 <p>Resolved by HF model type (see <code class="docutils literal notranslate"><span class="pre">registry.get_spec</span></code>); a model registers exactly
 one instance, filling only the sections it customizes.</p>
@@ -400,17 +402,6 @@ one instance, filling only the sections it customizes.</p>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="modelopt.models.specs.ModelSpec.collectable_names">
-<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">collectable_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#modelopt.models.specs.ModelSpec.collectable_names" title="Link to this definition"></a></dt>
-<dd><p>Attribute names declared collectable (see <code class="docutils literal notranslate"><span class="pre">collectable_field</span></code>).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>frozenset</em>[<em>str</em>]</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="modelopt.models.specs.ModelSpec.model_type">
 <span class="sig-name descname"><span class="pre">model_type</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#modelopt.models.specs.ModelSpec.model_type" title="Link to this definition"></a></dt>
@@ -418,51 +409,6 @@ one instance, filling only the sections it customizes.</p>
 <code class="docutils literal notranslate"><span class="pre">&quot;qwen3_moe&quot;</span></code>). Unique across the registry.</p>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="modelopt.models.specs.NormSpec">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">NormSpec</span></span><a class="headerlink" href="#modelopt.models.specs.NormSpec" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Topic section: normalization-layer architecture facts.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="modelopt.models.specs.NormSpec.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_plus_one_norm_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modelopt.models.specs.NormSpec.__init__" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>weight_plus_one_norm_names</strong> (<em>tuple</em><em>[</em><em>str</em><em>, </em><em>...</em><em>]</em>)</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>None</em></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="modelopt.models.specs.NormSpec.weight_plus_one_norm_names">
-<span class="sig-name descname"><span class="pre">weight_plus_one_norm_names</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></span><a class="headerlink" href="#modelopt.models.specs.NormSpec.weight_plus_one_norm_names" title="Link to this definition"></a></dt>
-<dd><p>Class names of norm layers whose stored weight is <code class="docutils literal notranslate"><span class="pre">w</span> <span class="pre">-</span> <span class="pre">1</span></code> (the effective
-scale is <code class="docutils literal notranslate"><span class="pre">weight</span> <span class="pre">+</span> <span class="pre">1</span></code>), e.g. Gemma’s RMSNorm variants and LayerNorm1P.
-Matched against a norm module’s MRO (case-insensitive exact names). Engines
-must account for the +1 when folding scales into the norm weight (AWQ
-pre_quant_scale fusion). A structural fallback (<code class="docutils literal notranslate"><span class="pre">zero_centered_gamma</span></code>) stays
-in the engine.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="modelopt.models.specs.collectable_field">
-<span class="sig-name descname"><span class="pre">collectable_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modelopt.models.specs.collectable_field" title="Link to this definition"></a></dt>
-<dd><p>Declare a spec field whose values may be aggregated across all registered specs.</p>
-<p>Marked fields (and <code class="docutils literal notranslate"><span class="pre">collectable_property</span></code> attributes) are the only ones
-<code class="docutils literal notranslate"><span class="pre">registry.list_all_possible</span></code> accepts.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="modelopt.models.specs.collectable_property">
-<span class="sig-name descname"><span class="pre">collectable_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modelopt.models.specs.collectable_property" title="Link to this definition"></a></dt>
-<dd><p>Like <code class="docutils literal notranslate"><span class="pre">collectable_field</span></code>, for derived (property) spec attributes.</p>
 </dd></dl>
 
 <dl class="py function">

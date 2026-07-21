@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>registry &mdash; Model Optimizer 0.0.1.dev1+g81d54cf83</title>
+  <title>registry &mdash; Model Optimizer 0.0.1.dev1+gd403eb6b9</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -184,7 +184,7 @@ only, so this package needs no torch import.</p>
 <td><p>Return the root HF model type (<code class="docutils literal notranslate"><span class="pre">model.config.model_type</span></code>), or <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#modelopt.models.registry.list_all_possible" title="modelopt.models.registry.list_all_possible"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_all_possible</span></code></a></p></td>
-<td><p>List every registered value of a collectable spec attribute, deduplicated in order.</p></td>
+<td><p>List a spec attribute's values across all registered specs, deduplicated in order.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#modelopt.models.registry.match_moe_block" title="modelopt.models.registry.match_moe_block"><code class="xref py py-obj docutils literal notranslate"><span class="pre">match_moe_block</span></code></a></p></td>
 <td><p>Return the MoE layout variant for <code class="docutils literal notranslate"><span class="pre">module</span></code>, resolved by model type.</p></td>
@@ -235,13 +235,11 @@ is the key for <code class="docutils literal notranslate"><span class="pre">get_
 <dl class="py function">
 <dt class="sig sig-object py" id="modelopt.models.registry.list_all_possible">
 <span class="sig-name descname"><span class="pre">list_all_possible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modelopt.models.registry.list_all_possible" title="Link to this definition"></a></dt>
-<dd><p>List every registered value of a collectable spec attribute, deduplicated in order.</p>
-<p><code class="docutils literal notranslate"><span class="pre">attr</span></code> must be declared collectable on <code class="docutils literal notranslate"><span class="pre">ModelSpec</span></code> (<code class="docutils literal notranslate"><span class="pre">collectable_field</span></code> /
-<code class="docutils literal notranslate"><span class="pre">collectable_property</span></code>), e.g. <code class="docutils literal notranslate"><span class="pre">list_all_possible(&quot;gate_up_pairs&quot;)</span></code>. The
-result is a global vocabulary: consumers match it against any model’s modules,
-so adding a value to one spec affects all models the consumer walks — prefer
-<code class="docutils literal notranslate"><span class="pre">get_spec(model_type)</span></code> / <code class="docutils literal notranslate"><span class="pre">match_moe_block</span></code> wherever the owning model is
-identifiable.</p>
+<dd><p>List a spec attribute’s values across all registered specs, deduplicated in order.</p>
+<p>E.g. <code class="docutils literal notranslate"><span class="pre">list_all_possible(&quot;gate_up_pairs&quot;)</span></code>. The result is a global vocabulary:
+consumers match it against any model’s modules, so adding a value to one spec
+affects all models the consumer walks — prefer <code class="docutils literal notranslate"><span class="pre">get_spec(model_type)</span></code> /
+<code class="docutils literal notranslate"><span class="pre">match_moe_block</span></code> wherever the owning model is identifiable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>attr</strong> (<em>str</em>)</p>
