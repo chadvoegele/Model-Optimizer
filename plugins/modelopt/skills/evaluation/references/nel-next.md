@@ -166,10 +166,11 @@ with its own `run_id`, copying the shared `services:` block.
   against `configs/shared/nel_next_containers.yaml` in the eval-factory repo, which is the
   pin and does move; tag runs with its `nemo_evaluator_next_version` (MLflow tag
   `nemo-evaluator-next-version`). Arch-suffixed `0.17.x/0.18.x-harbor-<arch>` are too old for TB 2.1.
-  Private gitlab-master image → cluster needs enroot creds (SKILL Step 7.5).
-- **Always set `proxy.request_timeout` explicitly** (`3600`, >= `agent_kwargs.llm_kwargs.timeout`).
-  Omitted, it inherits the model fragment's serving value (3600–36000 upstream); smaller than
-  the agent timeout silently truncates long turns.
+  Private gitlab-master image → cluster needs the GitLab Enroot flow from SKILL Step 7.5
+  (username, port-free credential host, tag-only import on Enroot 4.1.x, and a real layer preflight).
+- **Always set `proxy.request_timeout` explicitly** (`3600`, at least
+  `agent_kwargs.llm_kwargs.timeout`). Omitted, it inherits the model fragment's serving
+  value (3600–36000 upstream); a smaller proxy timeout silently truncates long agent turns.
 - **`drop_params`** for harbor agentic benchmarks: `max_tokens`, `max_completion_tokens`,
   `max_input_tokens_per_task`, `no_rebuild`. The last two are sent by the 0.5.x eval image;
   vLLM 400s on them if they aren't stripped.
