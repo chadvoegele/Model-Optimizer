@@ -412,6 +412,10 @@ Add credentials per the common skill's `slurm-setup.md` §6 if missing. If you c
 
 Run directly when the user asked to launch; otherwise ask before submitting.
 
+Before submitting any canary or full run, including shortcut and existing configs,
+apply [`mlflow-verification.md`](mlflow-verification.md#before-upload). Disable
+auto-export if generated artifacts cannot be checked before automatic upload.
+
 **Env setup:** `.env` is normally already created and filled back in Step 1 (via `modelopttools:eval-config`), at the **workspace root** — the dir you run `nel` from, not under the skill dir. Ensure it exists and source it — do **not** clobber an existing `.env`:
 
 ```bash
